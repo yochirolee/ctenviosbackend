@@ -1,8 +1,6 @@
 import express from "express";
-import routerV1 from "./api/v1/index.js";
 import fileUpload from "express-fileupload";
 import cors from "cors";
-import fs from "fs";
 import { supabaseService } from "./api/v1/Services/Supabase/supabaseService.js";
 import { mySqlService } from "./api/v1/Services/MySql/mySqlService.js";
 import { formatExcelData } from "./api/v1/Helpers/_formatReadedExcelData.js";
@@ -14,9 +12,9 @@ import { readExcelData } from "./api/v1/Lib/_readExcel.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api/v1", routerV1);
 app.use(fileUpload());
 app.use(morgan("dev"));
+
 const port = process.env.PORT || 3001;
 
 // Endpoint to handle Excel file upload and conversion
