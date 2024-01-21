@@ -6,7 +6,7 @@ import uploadExcelRouter from "./Routes/upload.excel.routes.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-	res.status(200).json({ message: "CTEnvios Tracking API - V1, contact: yleecruz@gmail.com 👋🌎🌍🌏" });
+	res.status(200).json({ message: "CTEnvios Tracking API - V1, contact: soporte@ctenvios.com 👋🌎🌍🌏" });
 });
 
 router.use("/users", userRouter);

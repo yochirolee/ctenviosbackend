@@ -1,16 +1,15 @@
 import express from "express";
 import routerV1 from "./api/v1/index.js";
-import convertExcelToJson from "convert-excel-to-json";
 import fileUpload from "express-fileupload";
-import dotenv from "dotenv";
-import cors from "cors";
+
 import fs from "fs";
 import { supabaseService } from "./api/v1/Services/Supabase/supabaseService.js";
 import { mySqlService } from "./api/v1/Services/MySql/mySqlService.js";
 import { formatExcelData } from "./api/v1/Helpers/formatReadedExcelData.js";
 import { removeUndefinedInvoices } from "./api/v1/Helpers/removeUndefinedInvoices.js";
-import multer from "multer";
 import morgan from "morgan";
+import { uploadFile } from "./api/v1/Lib/uploadFile.js";
+import { readExcelData } from "./api/v1/Lib/readExcel.js";
 
 const app = express();
 app.use(express.json());
@@ -22,13 +21,12 @@ const port = process.env.PORT || 3001;
 // Endpoint to handle Excel file upload and conversion
 app.post("/upload-excel", async (req, res) => {
 	let tempFilePath = await uploadFile(req.files.excelFile);
-	console.log(tempFilePath, "TEMP FILE PATH");
 	if (!tempFilePath) {
 		console.log("Error uploading file");
 		return res.status(500).send("Error uploading file");
 	}
 
-	const excelData = await readExcelData(tempFilePath);
+	const excelData =  readExcelData(tempFilePath);
 	if (excelData === undefined) {
 		console.log("Error reading excel file");
 		return res.status(500).send("Error reading excel file");
@@ -113,94 +111,16 @@ app.post("/upload-excel", async (req, res) => {
 	res.status(200).json({
 		message: "Excel file uploaded successfully.",
 		data: result,
+		formattedResult,
 		/* dir: tempFilePath,
 		sheets: sheets,
 		data: result, */
 	});
 });
 
-const uploadFile = async (file) => {
-	try {
-		if (!file) {
-			return res.status(400).send("No files were uploaded.");
-		}
-		//upload file to temp using express-fileupload
-		const uploadDir = "uploads";
-		if (!fs.existsSync(uploadDir)) {
-			fs.mkdirSync(uploadDir);
-		}
-
-		const tempFilePath = `${uploadDir}/temp.xlsx`;
-		await file.mv(tempFilePath, (err) => {
-			if (err) {
-				return err;
-			}
-		});
-
-		return tempFilePath;
-	} catch (err) {
-		console.log(err, "on upload file");
-	}
-};
-
 const removeTempFile = (tempFilePath) => {
 	fs.unlinkSync(tempFilePath);
 };
-
-const readExcelData = async (tempFilePath) => {
-	if (!tempFilePath) return;
-	try {
-		const excelData = convertExcelToJson({
-			sourceFile: tempFilePath,
-			columnToKey: {
-				A: "Number",
-				E: "InvoiceId",
-				B: "customsDate",
-				C: "pendingTransfertDate",
-				D: "transfertDate",
-				F: "deliveredDate",
-			},
-			header: {
-				rows: 4,
-			},
-		});
-		return excelData;
-	} catch (err) {
-		console.log(err, "error on reading excel file");
-	}
-};
-
-const containerUpsert = async (data) => {};
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
-app.post("/upload-excel2", upload.single("file"), (req, res) => {
-	console.log("uploading");
-	try {
-		// Access the uploaded file from req.file
-
-		const file = req.file.excelFile;
-		console.log(file);
-
-		// Check if a file was provided
-		if (!file) {
-			return res.status(400).send("No file uploaded.");
-		}
-		const filePath = path.join(__dirname, "uploads", "temp.xlsx");
-		// Assuming uploads directory exists
-		// Make sure to create the 'uploads' directory before running the code
-
-		// Your logic to handle the file content goes here
-		// For demonstration, let's simply write the file to the specified path
-		fs.writeFileSync(filePath, file.buffer);
-
-		res.status(200).send("File uploaded successfully.");
-	} catch (error) {
-		console.error(error);
-		res.status(500).send("Internal Server Error");
-	}
-});
 
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);
