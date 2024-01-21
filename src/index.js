@@ -115,6 +115,9 @@ app.post("/upload-excel", async (req, res) => {
 		data: result, */
 	});
 });
+app.get("/", (req, res) => {
+	res.json({ message: "ok,server is running" });
+});
 
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);
