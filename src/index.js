@@ -14,9 +14,7 @@ import { readExcelData } from "./api/v1/Lib/readExcel.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api/v1", routerV1);
 app.use(fileUpload());
-app.use(morgan("dev"));
 const port = process.env.PORT || 3001;
 
 // Endpoint to handle Excel file upload and conversion
