@@ -115,8 +115,10 @@ app.post("/upload-excel", async (req, res) => {
 		data: result, */
 	});
 });
-app.get("/", (req, res) => {
-	res.json({ message: "ok,server is running" });
+app.get("/", async (req, res) => {
+	res
+		.status(200)
+		.json({ message: "CTEnvios Tracking API - V1, contact: soporte@ctenvios.com 👋🌎🌍🌏" });
 });
 
 app.listen(port, () => {
