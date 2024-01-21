@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"main": "index.js",
 	"scripts": {
-		"start": "node src/index.js",
-		"dev": "nodemon src/index.js",
+		"start": "node index.js",
+		"dev": "nodemon index.js",
 		"test": "jest",
 		"db:seed": "npx prisma migrate dev --name init && npx prisma db seed",
 		"generate": "npx prisma migrate reset --preview-feature && npx prisma migrate deploy"
