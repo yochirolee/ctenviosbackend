@@ -5,11 +5,11 @@ import cors from "cors";
 import fs from "fs";
 import { supabaseService } from "./api/v1/Services/Supabase/supabaseService.js";
 import { mySqlService } from "./api/v1/Services/MySql/mySqlService.js";
-import { formatExcelData } from "./api/v1/Helpers/formatReadedExcelData.js";
-import { removeUndefinedInvoices } from "./api/v1/Helpers/removeUndefinedInvoices.js";
+import { formatExcelData } from "./api/v1/Helpers/_formatReadedExcelData.js";
+import { removeUndefinedInvoices } from "./api/v1/Helpers/_removeUndefinedInvoices.js";
 import morgan from "morgan";
-import { uploadFile } from "./api/v1/Lib/uploadFile.js";
-import { readExcelData } from "./api/v1/Lib/readExcel.js";
+import { uploadFile } from "./api/v1/Lib/_uploadFile.js";
+import { readExcelData } from "./api/v1/Lib/_readExcel.js";
 
 const app = express();
 app.use(cors());
@@ -106,9 +106,6 @@ app.post("/upload-excel", async (req, res) => {
 		});
 	await finalData(); */
 
-	removeTempFile(tempFilePath);
-	tempFilePath = null;
-	console.log(tempFilePath, "TEMP FILE PATH");
 	res.status(200).json({
 		message: "Excel file uploaded successfully.",
 		data: result,
@@ -118,10 +115,6 @@ app.post("/upload-excel", async (req, res) => {
 		data: result, */
 	});
 });
-
-const removeTempFile = (tempFilePath) => {
-	fs.unlinkSync(tempFilePath);
-};
 
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);
