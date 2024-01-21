@@ -1,13 +1,13 @@
 import express from "express";
 import fileUpload from "express-fileupload";
 import cors from "cors";
-import { supabaseService } from "./api/v1/Services/Supabase/supabaseService.js";
-import { mySqlService } from "./api/v1/Services/MySql/mySqlService.js";
-import { formatExcelData } from "./api/v1/Helpers/_formatReadedExcelData.js";
-import { removeUndefinedInvoices } from "./api/v1/Helpers/_removeUndefinedInvoices.js";
+import { supabaseService } from "./Services/Supabase/supabaseService.js";
+import { mySqlService } from "./Services/MySql/mySqlService.js";
+import { formatExcelData } from "./Helpers/_formatReadedExcelData.js";
+import { removeUndefinedInvoices } from "./Helpers/_removeUndefinedInvoices.js";
 import morgan from "morgan";
-import { uploadFile } from "./api/v1/Lib/_uploadFile.js";
-import { readExcelData } from "./api/v1/Lib/_readExcel.js";
+import { uploadFile } from "./Lib/_uploadFile.js";
+import { readExcelData } from "./Lib/_readExcel.js";
 
 const app = express();
 app.use(cors());
