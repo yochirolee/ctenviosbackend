@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"dev": "nodemon src/index.js",
+		"dev": "src/index.js",
 		"test": "jest",
 		"db:seed": "npx prisma migrate dev --name init && npx prisma db seed",
 		"generate": "npx prisma migrate reset --preview-feature && npx prisma migrate deploy"
