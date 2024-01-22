@@ -25,9 +25,11 @@ export const mySqlService = {
 	},
 	packages: {
 		getPackageByHBL: async (hbl) => {
+			console.log(hbl, "HBL")
 			try {
 				const packagesFound = await query("select * from tracking where HBL=?", [hbl]);
 				if (packagesFound.length === 0) return [];
+				console.log(packagesFound, "Packages Found")
 				return packagesFound;
 			} catch (error) {
 				console.log(error);

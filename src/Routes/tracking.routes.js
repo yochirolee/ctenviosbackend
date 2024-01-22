@@ -12,7 +12,9 @@ router.get("/", async (req, res) => {
 
 router.get("/hbl/:hbl", async (req, res) => {
 	if (!req.params.hbl) return res.json({ message: "HBL is required" });
+	console.log(req.params);
 	const pack = await mySqlService.packages.getPackageByHBL(req.params.hbl);
+	console.log(pack)
 	if (pack.length === 0) return res.json({ message: "Package not found" });
 
 	const tracking = await prisma.tracking.findUnique({
@@ -40,16 +42,36 @@ router.get("/hbl/:hbl", async (req, res) => {
 				description: pack.Description,
 				palletId: pack.PalletId,
 
-				trackingHistory: {
-					invoiceDate: pack.InvoiceDate,
-					palletDate: pack.PalletDate,
-					containerDate: pack.ContainerDate,
-					portDate: tracking?.portDate,
-					customDate: tracking?.customsDate,
-					pendingTransferDate: tracking?.pendingTransfertDate,
-					transferDate: tracking?.transfertDate,
-					deliveredDate: tracking?.deliveredDate,
-				},
+				trackingHistory: [
+					{
+						location: "Entregado",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.deliveredDate,
+					},
+					{
+						location: "En Traslado",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.transfertDate,
+					},
+					{
+						location: "Listo para Traslado",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.pendingTransfertDate,
+					},
+
+					{
+						location: "Aduana Cuba",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.customsDate,
+					},
+					{
+						location: "Puerto del Mariel",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.portDate,
+					},
+					{ location: "En Contenedor", createdAt: pack?.ContainerDate ? pack.ContainerDate : null },
+					{ location: "En Pallet", createdAt: pack?.PalletDate ? pack.PalletDate : null },
+
+					{
+						createdAt: pack.InvoiceDate,
+						location: "Facturado",
+					},
+				],
 			};
 		}),
 	};
