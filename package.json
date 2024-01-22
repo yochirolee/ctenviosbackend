@@ -3,9 +3,13 @@
 	"version": "1.0.0",
 	"license": "MIT",
 	"main": "index.js",
+	"engines": {
+		"node": ">=14.0.0"
+	},
+	"type": "module",
 	"scripts": {
-		"start": "node index.js",
-		"dev": "nodemon index.js",
+		"start": "node ./src/index.js",
+		"dev": "nodemon ./src/index.js",
 		"test": "jest",
 		"db:seed": "npx prisma migrate dev --name init && npx prisma db seed",
 		"generate": "npx prisma migrate reset --preview-feature && npx prisma migrate deploy"

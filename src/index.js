@@ -8,6 +8,7 @@ import { removeUndefinedInvoices } from "./Helpers/_removeUndefinedInvoices.js";
 import morgan from "morgan";
 import { uploadFile } from "./Lib/_uploadFile.js";
 import { readExcelData } from "./Lib/_readExcel.js";
+import trackingRoutes from "./Routes/tracking.routes.js";
 
 const app = express();
 app.use(cors());
@@ -118,6 +119,7 @@ app.get("/", async (req, res) => {
 		.status(200)
 		.json({ message: "CTEnvios Tracking API - V1, contact: soporte@ctenvios.com 👋🌎🌍🌏" });
 });
+app.use("/tracking", trackingRoutes);
 
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);
