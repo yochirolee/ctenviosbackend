@@ -95,19 +95,33 @@ router.get("/invoice/:invoiceId", async (req, res) => {
 
 				trackingHistory: [
 					{
+						location: "Entregado",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.deliveredDate,
+					},
+					{
+						location: "En Traslado",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.transfertDate,
+					},
+					{
+						location: "Listo para Traslado",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.pendingTransfertDate,
+					},
+
+					{
+						location: "Aduana Cuba",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.customsDate,
+					},
+					{
+						location: "Puerto del Mariel",
+						createdAt: tracking.find((track) => track.hbl === pack.HBL)?.portDate,
+					},
+					{ location: "En Contenedor", createdAt: pack?.ContainerDate ? pack.ContainerDate : null },
+					{ location: "En Pallet", createdAt: pack?.PalletDate ? pack.PalletDate : null },
+
+					{
 						createdAt: pack.InvoiceDate,
 						location: "Facturado",
 					},
-					{ palletDate: pack?.PalletDate ? pack.PalletDate : null },
-					{ containerDate: pack?.ContainerDate ? pack.ContainerDate : null },
-					{ portDate: tracking.find((track) => track.hbl === pack.HBL)?.portDate },
-					{ customDate: tracking.find((track) => track.hbl === pack.HBL)?.customsDate },
-					{
-						pendingTransferDate: tracking.find((track) => track.hbl === pack.HBL)
-							?.pendingTransfertDate,
-					},
-					{ transferDate: tracking.find((track) => track.hbl === pack.HBL)?.transfertDate },
-					{ delivereDate: tracking.find((track) => track.hbl === pack.HBL)?.deliveredDate },
 				],
 			};
 		}),
