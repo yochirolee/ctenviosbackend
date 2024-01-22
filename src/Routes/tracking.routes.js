@@ -95,7 +95,8 @@ router.get("/invoice/:invoiceId", async (req, res) => {
 
 				trackingHistory: [
 					{
-						invoiceDate: pack.InvoiceDate,
+						createdAt: pack.InvoiceDate,
+						location: "Facturado",
 					},
 					{ palletDate: pack?.PalletDate ? pack.PalletDate : null },
 					{ containerDate: pack?.ContainerDate ? pack.ContainerDate : null },
