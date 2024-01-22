@@ -93,17 +93,21 @@ router.get("/invoice/:invoiceId", async (req, res) => {
 				description: pack.Description,
 				palletId: pack.PalletId,
 
-				trackingHistory: {
-					invoiceDate: pack.InvoiceDate,
-					palletDate: pack.PalletDate,
-					containerDate: pack.ContainerDate,
-					portDate: tracking.find((track) => track.hbl === pack.HBL)?.portDate,
-					customDate: tracking.find((track) => track.hbl === pack.HBL)?.customsDate,
-					pendingTransferDate: tracking.find((track) => track.hbl === pack.HBL)
-						?.pendingTransfertDate,
-					transferDate: tracking.find((track) => track.hbl === pack.HBL)?.transfertDate,
-					delivereDate: tracking.find((track) => track.hbl === pack.HBL)?.deliveredDate,
-				},
+				trackingHistory: [
+					{
+						invoiceDate: pack.InvoiceDate,
+					},
+					{ palletDate: pack?.PalletDate ? pack.PalletDate : null },
+					{ containerDate: pack?.ContainerDate ? pack.ContainerDate : null },
+					{ portDate: tracking.find((track) => track.hbl === pack.HBL)?.portDate },
+					{ customDate: tracking.find((track) => track.hbl === pack.HBL)?.customsDate },
+					{
+						pendingTransferDate: tracking.find((track) => track.hbl === pack.HBL)
+							?.pendingTransfertDate,
+					},
+					{ transferDate: tracking.find((track) => track.hbl === pack.HBL)?.transfertDate },
+					{ delivereDate: tracking.find((track) => track.hbl === pack.HBL)?.deliveredDate },
+				],
 			};
 		}),
 	};
@@ -115,7 +119,8 @@ router.get("/container/:containerId", async (req, res) => {
 	const tracking = await prisma.tracking.findMany({
 		where: { containerId: Number(req.params.containerId) },
 	});
-	res.json(tracking);
+	const entregados = tracking.filter((track) => track.status === "Entregado").length;
+	res.json({ data: tracking, entregados: entregados });
 });
 
 export default router;
