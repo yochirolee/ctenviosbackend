@@ -16,7 +16,7 @@ export const mySqlService = {
 		getInvoiceById: async (invoiceId) => {
 			try {
 				const invoiceFound = await query("select * from tracking where InvoiceId=?", [invoiceId]);
-				if (invoiceFound.length === 0) return [];
+				if (invoiceFound?.length === 0) return [];
 				return invoiceFound;
 			} catch (error) {
 				console.log(error);
@@ -25,11 +25,9 @@ export const mySqlService = {
 	},
 	packages: {
 		getPackageByHBL: async (hbl) => {
-			console.log(hbl, "HBL")
 			try {
 				const packagesFound = await query("select * from tracking where HBL=?", [hbl]);
-				if (packagesFound.length === 0) return [];
-				console.log(packagesFound, "Packages Found")
+				if (packagesFound?.length === 0) return [];
 				return packagesFound;
 			} catch (error) {
 				console.log(error);
@@ -39,7 +37,6 @@ export const mySqlService = {
 
 	customers: {
 		getCustomerById: async (customerId) => {
-			console.log(customerId, "Customer Id");
 			try {
 				const customer = {};
 				const [result] = await query("select * from clientes where codigo=?", [customerId]);
@@ -48,7 +45,6 @@ export const mySqlService = {
 				customer.mobile = result.cel;
 				customer.phone = result.tel;
 
-				console.log(customer, "Customer");
 				return customer;
 			} catch (error) {
 				console.log(error);
