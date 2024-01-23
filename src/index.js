@@ -20,6 +20,9 @@ const port = process.env.PORT || 3001;
 
 // Endpoint to handle Excel file upload and conversion
 app.post("/upload-excel", async (req, res) => {
+	if (!req.files || Object.keys(req.files).length === 0) {
+		return res.status(400).send("No files were uploaded.");
+	}
 	let tempFilePath = await uploadFile(req.files.excelFile);
 	if (!tempFilePath) {
 		return res.status(500).send("Error uploading file");
