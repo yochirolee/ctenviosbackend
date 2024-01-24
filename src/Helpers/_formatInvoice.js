@@ -1,6 +1,7 @@
 import { mySqlService } from "../Services/MySql/mySqlService.js";
 
 export const formatInvoice = async (invoice, tracking) => {
+	console.log(invoice, tracking);
 	try {
 		if (invoice?.length === 0) return [];
 		return {
@@ -49,8 +50,13 @@ export const formatInvoice = async (invoice, tracking) => {
 						{
 							location: "En Contenedor",
 							createdAt: pack?.ContainerDate ? pack.ContainerDate : null,
+							container: invoice[0]?.ContainerName ? invoice[0]?.ContainerName : null,
 						},
-						{ location: "En Pallet", createdAt: pack?.PalletDate ? pack.PalletDate : null },
+						{
+							location: "En Pallet",
+							createdAt: pack?.PalletDate ? pack.PalletDate : null,
+							pallet: pack?.PalletId ? pack.PalletId : null,
+						},
 
 						{
 							createdAt: pack.InvoiceDate,
