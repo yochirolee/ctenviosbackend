@@ -43,17 +43,18 @@ export const formatInvoice = async (invoice, tracking) => {
 								createdAt: pack?.ContainerDate || null,
 								container: pack?.ContainerName || null,
 							},
+
+							{
+								location: "En Pallet",
+								createdAt: pack?.palletDate || null,
+								pallet: pack?.PalletId || null,
+							},
 							{
 								location: "Despacho",
 								createdAt: pack?.DispatchId
 									? await mySqlService.dispatch.getDispatchById(pack.DispatchId)
 									: null,
 								dispatch: pack?.DispatchId || null,
-							},
-							{
-								location: "En Pallet",
-								createdAt: pack?.palletDate || null,
-								pallet: pack?.PalletId || null,
 							},
 							{
 								createdAt: pack.InvoiceDate,
