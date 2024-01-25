@@ -8,8 +8,14 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 router.get("/", async (req, res) => {
-	const tracking = await prisma.tracking.findMany();
-	res.json(tracking);
+	const invoices = await mySqlService.invoices.getInvoicesLimit(100);
+
+	const tracking = await prisma.tracking.findMany({ take: 100 });
+	const invoicesToSearch = tracking
+		.map((track) => track.oldInvoiceId)
+		.filter((item, index, array) => array.indexOf(item) === index);
+
+	res.json(invoices);
 });
 
 router.get("/hbl/:hbl", async (req, res) => {
@@ -22,7 +28,6 @@ router.get("/hbl/:hbl", async (req, res) => {
 		});
 
 		const newInvoice = await formatInvoice(pack, tracking);
-
 		res.json(newInvoice);
 	} catch (error) {
 		console.log(error);

@@ -7,8 +7,8 @@ export const supabaseService = {
 				.from("Tracking")
 				.upsert(dataToUpsert, { onConflict: "hbl" })
 				.select("*");
-			if (error) throw error;
-			return data;
+			
+			return {data,error};
 		} catch (error) {
 			console.log(error);
 		}

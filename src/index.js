@@ -38,21 +38,21 @@ app.post("/upload-excel", async (req, res) => {
 	}
 
 	const formattedResult = [];
-	const result = await Promise.all(
+	await Promise.all(
 		sheets.map(async (sheet) => {
 			const sheetData = excelData[sheet];
 			const invoicesToSearch = removeUndefinedInvoices(sheetData);
 
-			const existingInvoices = await mySqlService.invoices.getInvoices(invoicesToSearch, sheet);
+			const existingInvoices = await mySqlService.invoices.findInvoices(invoicesToSearch, sheet);
 			const formattedData = await formatExcelData(existingInvoices, sheetData);
-			const data = await supabaseService.upsertTracking(formattedData);
+			const { data, error } = await supabaseService.upsertTracking(formattedData);
 
 			formattedResult.push({
 				container: sheet,
 				status: data?.length ? "ok" : "error",
-				ietms_updated: data?.length ? data.length : 0,
+				items_updated: data?.length ? data.length : 0,
+				error: error ? error.message : null,
 			});
-			return data;
 		}),
 	);
 

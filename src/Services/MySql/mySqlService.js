@@ -2,12 +2,24 @@ import { query } from "./query.js";
 
 export const mySqlService = {
 	invoices: {
-		getInvoices: async (invoicesArray) => {
+		findInvoices: async (invoicesArray) => {
 			if (invoicesArray.length === 0) return [];
 			try {
 				const invoicesFound = await query("SELECT * FROM `tracking` where InvoiceId IN (?);", [
 					invoicesArray,
 				]);
+				return invoicesFound;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		getInvoicesLimit: async (limit) => {
+			if (!limit) return [];
+			try {
+				const invoicesFound = await query(
+					"SELECT * FROM `tracking` order by InvoiceId DESC LIMIT ?;",
+					[limit],
+				);
 				return invoicesFound;
 			} catch (error) {
 				console.log(error);
@@ -84,6 +96,29 @@ export const mySqlService = {
 				reciever.province = state?.Province;
 				reciever.municipality = city?.Municipality;
 				return reciever;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+	},
+	pallets: {
+		getPalletById: async (id) => {
+			try {
+				const [result] = await query("SELECT * FROM pallets WHERE codigo=?", [id]);
+				return result;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+	},
+	dispatch: {
+		getDispatchById: async (id) => {
+			try {
+				const dispatchId = id.slice(1);
+				const [result] = await query("SELECT fecha as createdAt FROM despachos WHERE codigo=?", [
+					dispatchId,
+				]);
+				return result?.createdAt;
 			} catch (error) {
 				console.log(error);
 			}
