@@ -124,4 +124,27 @@ export const mySqlService = {
 			}
 		},
 	},
+	container: {
+		getContainerById: async (id) => {
+			try {
+				const [result] = await query(
+					"select codigo as containerId, fecha as createdAt, numero as containerNumber, servicio as service, master, paquetes as packages,peso as weight from contenedores WHERE codigo=?",
+					[id],
+				);
+				return result;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		getContainers: async () => {
+			try {
+				const result = await query(
+					"select codigo as containerId, fecha as createdAt, numero as containerNumber, servicio as service, master, paquetes as packages,peso as weight from contenedores order by codigo DESC;",
+				);
+				return result;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+	},
 };

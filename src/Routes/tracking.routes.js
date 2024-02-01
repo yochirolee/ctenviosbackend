@@ -1,7 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { mySqlService } from "../Services/MySql/mySqlService.js";
-import { format } from "mysql2";
 import { formatInvoice } from "../Helpers/_formatInvoice.js";
 
 const router = express.Router();
@@ -61,7 +60,21 @@ router.get("/container/:containerId", async (req, res) => {
 		where: { containerId: Number(req.params.containerId) },
 	});
 	const entregados = tracking.filter((track) => track.status === "Entregado").length;
-	res.json({ data: tracking, entregados: entregados });
+	const aduana = tracking.filter((track) => track.status === "En Aduana").length;
+	const traslado = tracking.filter((track) => track.status === "En Traslado").length;
+	const listo = tracking.filter((track) => track.status === "Listo para Traslado").length;
+	const port = tracking.filter((track) => track.status === "En Puerto").length;
+	res.json({
+		data: tracking,
+		tracking: {
+			total: tracking.length,
+			entregados: entregados,
+			aduana: aduana,
+			traslado: traslado,
+			listo: listo,
+			port: port,
+		},
+	});
 });
 
 export default router;

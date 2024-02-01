@@ -9,6 +9,7 @@ import morgan from "morgan";
 import { uploadFile } from "./Lib/_uploadFile.js";
 import { readExcelData } from "./Lib/_readExcel.js";
 import trackingRoutes from "./Routes/tracking.routes.js";
+import containerRoutes from "./Routes/container.routes.js";
 
 const app = express();
 app.use(cors());
@@ -70,6 +71,7 @@ app.get("/", async (req, res) => {
 		.json({ message: "CTEnvios Tracking API - V1, contact: soporte@ctenvios.com 👋🌎🌍🌏" });
 });
 app.use("/tracking", trackingRoutes);
+app.use("/containers", containerRoutes);
 
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);
