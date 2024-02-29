@@ -11,7 +11,7 @@ export const readExcelData = (tempFilePath) => {
 				B: "customsDate",
 				C: "pendingTransfertDate",
 				D: "transfertDate",
-				F: "deliveredDate",
+				G: "deliveredDate",
 			},
 			header: {
 				rows: 4,
