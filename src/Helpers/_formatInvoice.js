@@ -51,9 +51,9 @@ export const formatInvoice = async (invoice, tracking) => {
 							},
 							{
 								location: "Despacho",
-								createdAt: pack?.dispatchDate,
+								createdAt: pack?.dispatchDate || null,
 									
-								dispatch: pack?.DispatchId || null,
+								dispatch: pack?.dispatchId || null,
 							},
 							{
 								createdAt: pack.InvoiceDate,
