@@ -51,9 +51,8 @@ export const formatInvoice = async (invoice, tracking) => {
 							},
 							{
 								location: "Despacho",
-								createdAt: pack?.DispatchId
-									? await mySqlService.dispatch.getDispatchById(pack.DispatchId)
-									: null,
+								createdAt: pack?.dispatchDate,
+									
 								dispatch: pack?.DispatchId || null,
 							},
 							{
